@@ -220,14 +220,13 @@ const search_songs = async function(req, res) {
   const valenceLow = req.query.valence_low ?? 0;
   const valenceHigh = req.query.valence_high ?? 1;
   const explicit = req.query.explicit ? 1 : 0;
-
   connection.query(`
-    SELECT song_id, album_id, title, number, duration, plays, danceability, energy, valence, tempo, key_mode, explicit
+    SELECT *
     FROM Songs
-    WHERE title LIKE ${title} AND duration_low >= ${durationLow} AND duration_high <= ${durationHigh} AND plays_low >= ${playsLow}
-    AND plays_high <= ${playsHigh} AND danceability_low >= ${danceabilityLow} AND danceability_high <= ${danceabilityHigh}
-    AND energy_low >= ${energyLow} AND energy_high <= ${energyHigh} AND valence_low >= ${valenceLow}
-    AND valence_high <= ${valenceHigh} AND explicit = ${explicit}
+    WHERE title LIKE '%${title}%' AND duration >= ${durationLow} AND duration <= ${durationHigh} AND plays >= ${playsLow}
+    AND plays <= ${playsHigh} AND danceability >= ${danceabilityLow} AND danceability <= ${danceabilityHigh}
+    AND energy >= ${energyLow} AND energy <= ${energyHigh} AND valence >= ${valenceLow}
+    AND valence <= ${valenceHigh} AND explicit >= ${explicit}
     ORDER BY title ASC;
   `, (err, data) => {
     if (err || data.length === 0) {
